@@ -1,0 +1,22 @@
+{
+	"manifest_version": 2,
+	"name": "KTU eBook to PDF",
+	"version": "0.1",
+	
+	"browser_action": {
+		"default_icon": {
+			"38": "images/icon38.png"
+		},
+		"default_title":"KTU eBook to PDF"
+	},
+	
+	"content_scripts": [
+		{
+			"matches": [
+				
+				"https://www.ebooks.ktu.lt/eb/*"
+			],
+			"js": ["jquery-2.1.4.min.js", "jspdf.min.js", "content.js"]
+		}
+	]
+}

@@ -5,6 +5,6 @@ Chrome extension which takes data from KTU eBook site and spits out PDF
 Clone this repo, go to 'chrome://extensions', enable 'Developer mode', click 'Load unpacked extension...' and select path to 'KTU eBook to PDF'. 
 Once this is done, visit KTU eBook that you want to download and above the embedded player there will be a new button called 'Download as PDF'. Click that and just wait :)
 
-#####Flash player has to be either disabled or uninstalled for this to work
+#####Flash player has to be either disabled or uninstalled for this to work. You can disable it in 'chrome://plugins'
 
 #####I might publish this to Chrome webstore one day, once I do so, I'll provide the link.

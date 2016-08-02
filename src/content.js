@@ -1,3 +1,4 @@
+
 $("<button id='getInfo'>Download as PDF</button>").insertAfter(".Pavadinimas");
 
 $("#getInfo").click(function () {
@@ -8,8 +9,6 @@ $("#getInfo").click(function () {
 
   //Showing user that the code is executing
 	$(this).attr("disabled", true).text("Getting your PDF ready (Page: 0/" + totalPages + ")");
-
-
 
 
   if (!isFlash) {

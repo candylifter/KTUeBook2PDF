@@ -1,1 +1,13 @@
 node_modules
+
+#ignore archive files
+*.7z
+*.jar
+*.rar
+*.zip
+*.gz
+*.bzip
+*.bz2
+*.xz
+*.lzma
+*.cab

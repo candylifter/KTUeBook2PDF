@@ -1,35 +1,65 @@
 $("<button id='getInfo'>Download as PDF</button>").insertAfter(".Pavadinimas");
 
 $("#getInfo").click(function () {
-
+  //Check if pdf is rendered to flash app
+  var isFlash = $('object[type="application/x-shockwave-flash"]').length == 1 ? true : false;
 	//Getting eBook name from DOM
-    var fileName = $(".Pavadinimas").text();
-    //Getting total number of pages
-    var totalPages = $(".flexpaper_lblTotalPages").text();
-    //converting string from DOM to integer
-	totalPages = parseInt(totalPages.replace(/^\D+/g, ''));
+  var fileName = $(".Pavadinimas").text();
 
-    //Showing user that the code is executing
+  //Showing user that the code is executing
 	$(this).attr("disabled", true).text("Getting your PDF ready (Page: 0/" + totalPages + ")");
 
-    //initialising jsPDF
-	var doc = new jsPDF();
-	
+
+
+
+  if (!isFlash) {
+    //HTML5
     //Getting first eBook page path
     //img path is the same for every img except the last number is different as it indicates the page
     //example: ../skf.php?data=S2F..MzA=&format=png&page=1
     //Usually it's in 'img' tag's attribute 'src' but sometimes the 'src' is empty and the image is in background-image
-	var firstImgPath = $("#page_0_documentViewer").attr("src");
+    var firstImgPath = $("#page_0_documentViewer").attr("src");
 
-    //checking if the 'src' attr is containing an empty dataURL (it starts like this 'data/..')
-	if (firstImgPath.charAt(0) == 'd') {
-	    console.log("'src' tag doesn't have a link, getting it from 'background-image' css attribute");
-	    firstImgPath = $("#page_0_documentViewer").css("background-image");
-        //removing 'url("")' from the path (starting from 5th char ending in end-2)
-	    firstImgPath = firstImgPath.substring(5, firstImgPath.length - 2);
-	}
+    //checking if the 'src' attr is containing an empty dataURL (it starts with base64 data like this 'data/..')
+    if (firstImgPath.charAt(0) == 'd') {
+      console.log("'src' tag doesn't have a link, getting it from 'background-image' css attribute");
+      firstImgPath = $("#page_0_documentViewer").css("background-image");
+      //removing 'url("")' from the path (starting from 5th char ending in end-2)
+      firstImgPath = firstImgPath.substring(5, firstImgPath.length - 2);
+    }
+
+    //Getting total number of pages
+    var totalPages = $(".flexpaper_lblTotalPages").text();
+    //converting string from DOM to integer
+    totalPages = parseInt(totalPages.replace(/^\D+/g, ''));
+  } else {
+    //Flash
+    //get element's attribute which holds our desired page
+    var flashVars = $('param[name="flashvars"]').attr('value');
+
+    var cutFrom = flashVars.indexOf('&IMGFiles=') + '&IMGFiles='.length;
+    var cutTo = flashVars.lastIndexOf('{page}&JSONFile=');
+
+    var firstImgPath = flashVars.substring(cutTo, cutFrom) + 1;
+
+    //Getting total pages
+    cutFrom = flashVars.indexOf('&SwfFile=') + '&SwfFile='.length;
+    cutTo = flashVars.lastIndexOf('&PdfFile=');
+
+    var SwfFilePath = decodeURIComponent(flashVars.substring(cutTo, cutFrom));
+
+    cutFrom = SwfFilePath.indexOf('[*,0],') + '[*,0],'.length;
+    cutTo = SwfFilePath.length - 1;
+    var totalPages = parseInt(SwfFilePath.substring(cutFrom, cutTo));
+  }
+
+
+
+  //initialising jsPDF
+	var doc = new jsPDF();
+
 	console.log("eBook's first page path: " + firstImgPath);
-	
+
     //Changing first eBook page path to universal path
 	imgPath = firstImgPath.substring(0, firstImgPath.length - 1);
 
@@ -66,8 +96,6 @@ $("#getInfo").click(function () {
 	    console.log("Image added!");
 	}
 
-    //Starting a strange loop to execute code consecutive 
-    //simple loops such as 'for' and similar don't work, because the loop has to wait for callback
 	var x = 0;
 
 	var loopArray = function (arr) {
@@ -93,4 +121,3 @@ $("#getInfo").click(function () {
 	loopArray(pagesArray);
 
 });
-

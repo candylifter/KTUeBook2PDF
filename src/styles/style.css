@@ -1,0 +1,72 @@
+/*Container*/
+#ktuebook2pdf__container {
+  display: block;
+  margin: 1em 0;
+
+  width: 769px;
+}
+
+/*Button*/
+#ktuebook2pdf__download-btn {
+  display: block;
+  margin: .4em 0 ;
+  padding: 1em .5em;
+  color: white;
+  background: #231F20;
+  border: none;
+  font-size: 1em;
+  font-weight: 600;
+  transition: .1s ease-in;
+}
+
+#ktuebook2pdf__download-btn:hover {
+  background-color: #3e3739;
+}
+
+#ktuebook2pdf__download-btn:active,
+#ktuebook2pdf__download-btn:focus {
+  background-color: #51484a;
+}
+
+#ktuebook2pdf__download-btn:disabled {
+  opacity: .5;
+  background: #231F20;
+
+}
+
+
+
+/*Progress bar*/
+
+#ktuebook2pdf__progress[value] {
+  display: inline-block;
+  width: 85%;
+  -webkit-appearance: none;
+}
+
+#ktuebook2pdf__progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+#ktuebook2pdf__progress[value]::-webkit-progress-value {
+  background-image:
+	   -webkit-linear-gradient(-45deg,
+	                           transparent 33%, rgba(0, 0, 0, .1) 33%,
+	                           rgba(0,0, 0, .1) 66%, transparent 66%),
+	   -webkit-linear-gradient(top,
+	                           rgba(255, 255, 255, .25),
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, #232526, #414345);
+
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+#ktuebook2pdf__progress-counter {
+  display: inline-block;
+  text-align: center;
+  width: 15%;
+  font-size: 1em;
+  margin: 0;
+
+}

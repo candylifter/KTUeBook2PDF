@@ -1,14 +1,14 @@
+$("<button id='ktuebook2pdf__download-btn'>Download as PDF</button>").insertAfter(".Pavadinimas");
 
-$("<button id='getInfo'>Download as PDF</button>").insertAfter(".Pavadinimas");
-
-$("#getInfo").click(function () {
+$("#ktuebook2pdf__download-btn").click(function () {
   //Check if pdf is rendered to flash app
   var isFlash = $('object[type="application/x-shockwave-flash"]').length == 1 ? true : false;
 	//Getting eBook name from DOM
   var fileName = $(".Pavadinimas").text();
 
   //Showing user that the code is executing
-	$(this).attr("disabled", true).text("Getting your PDF ready (Page: 0/" + totalPages + ")");
+	$(this).attr("disabled", true).text("Getting your PDF ready...");
+
 
 
   if (!isFlash) {
@@ -53,13 +53,13 @@ $("#getInfo").click(function () {
   }
 
 
+  $('<div id="ktuebook2pdf__container"><progress id="ktuebook2pdf__progress" max="'+ totalPages +'" value="0"></progress><p id="ktuebook2pdf__progress-counter">0/'+totalPages+' pages</p></div>').insertAfter(this);
+
 
   //initialising jsPDF
 	var doc = new jsPDF();
 
-	console.log("eBook's first page path: " + firstImgPath);
-
-    //Changing first eBook page path to universal path
+  //Changing first eBook page path to universal path
 	imgPath = firstImgPath.substring(0, firstImgPath.length - 1);
 
 	//We'll be putting all eBook's page paths into an array
@@ -82,35 +82,34 @@ $("#getInfo").click(function () {
 	    img.src = url;
 	}
 
-    //This function adds image data to pdf
+  //This function adds image data to pdf
 	var createPDF = function (imgData, currentPage) {
 	    //var doc = new jsPDF();
 
 	    doc.addImage(imgData, 'JPEG', 0, 0, 211, 300);
-        //checking if not the last page
+      //checking if not the last page
 	    if (currentPage < (totalPages-1)) {
 	        doc.addPage();
 	    }
-	    $("#getInfo").text("Getting your PDF ready (Page: " + (currentPage+1) + "/" + totalPages + ")");
-	    console.log("Image added!");
+      $('#ktuebook2pdf__progress').attr('value', currentPage+1);
+      $('#ktuebook2pdf__progress-counter').text(currentPage + 1 + '/'+ totalPages + ' pages');
 	}
 
 	var x = 0;
 
 	var loopArray = function (arr) {
-        //calling function to load image
+      //calling function to load image
 	    getImageFromUrl(arr[x], function (img) {
-            //adding eBook image as a page
+          //adding eBook image as a page
 	        createPDF(img, x);
 	        x++;
 
-            //checking for other elements in the array
+          //checking for other elements in the array
 	        if (x < arr.length) {
 	            loopArray(arr);
 	        }
 	        else {
-                //when no elements left, prompts user to save PDF
-	            console.log("Saving pdf...");
+              //when no elements left, prompts user to save PDF
 	            doc.save(fileName + ".pdf");
 	        }
 	    });
